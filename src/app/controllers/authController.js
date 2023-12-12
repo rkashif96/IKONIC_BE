@@ -22,7 +22,7 @@ class AuthController {
         const credentials = req.body
         const loginUser = await AuthService.login(credentials)
 
-        return res.status(200).cookie("token", loginUser.accessToken.toString(), { expires: new Date(Date.now() + 600000) }).status(200).json({
+        return res.status(200).cookie("token", loginUser.accessToken.toString()).status(200).json({
             success: true,
             message: 'User signed in successfully',
             data: loginUser,

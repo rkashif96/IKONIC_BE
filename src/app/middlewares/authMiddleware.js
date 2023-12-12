@@ -1,18 +1,23 @@
-const { verify } = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 const isAuthenticated = (req, res, next) => {
-  if (req.cookies.token) {
-    const decoded = verify(req.cookies.token.toString(), "mySceretKey")
-    if (decoded) {
-      req.user = decoded
-      console.log('decoded : ', decoded)
-      next()
+  const authorizationHeader = req.headers['authorization'];
+
+  if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
+    const token = authorizationHeader.split(' ')[1];
+
+    try {
+      const decoded = jwt.verify((token), "mySecretKey");
+      console.log('decoded: ', decoded);
+      next();
+    } catch (error) {
+      console.log(error);
+      res.status(401).json({ message: "Invalid or expired token" });
     }
+  } else {
+    res.status(401).json({ message: "Please Login to Continue" });
   }
-  else {
-    throw new Error("Please Login to Continue")
-  }
+};
 
-}
 
-module.exports= isAuthenticated;
+module.exports = isAuthenticated;

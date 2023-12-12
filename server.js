@@ -6,10 +6,11 @@ const { connectDB } = require('./src/config/db')
 const  errorHandler  = require('./src/app/middlewares/errorMiddleware')
 const cookieParser = require('cookie-parser');
 const app= express();
-const port= 3000
+const port= 5000
 const server = http.createServer(app);
+const cors= require('cors')
 
-
+app.use(cors())
 app.use(morgan("dev"));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
